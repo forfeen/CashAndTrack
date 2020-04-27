@@ -4,39 +4,45 @@ import java.lang.String;
 
 public class Menu {
 
-    private String menuName;
-    private List<String> allMenu = new ArrayList<String>();
 
-    public Menu(String menu) {
-        this.menuName = menu;
+    Map<String, Double> newMenu = new TreeMap<>();
+    List<String> name = new ArrayList<>();
+
+    public void newMenu(String menu, double price) {
+        name.add(menu);
+        newMenu.put(menu, price);
     }
 
-    public int count() {
-        return allMenu.size();
-    }
 
-    public boolean addMenu(String newMenu) {
-        allMenu.add(newMenu);
-        return true;
-    }
-
-    public boolean deleteMenu(int index) {
-        if (index > allMenu.size()) {
-            return false; }
-        else {
-            allMenu.remove(index-1);
-        }return true;
-    }
-
-    public String toString() {
-        String menu = " ";
-        if (allMenu.size() == 0){
-            menu = "No Menu";
+    public void allMenu() {
+        if (newMenu.size() <= 0) {
+            System.out.println("No Menu.");
         } else {
-            for (int i = 0; i < allMenu.size()-1; i++){
-                menu += allMenu.get(i).toString() + ",";
-            } menu += allMenu.get(allMenu.size()-1).toString();
-        } return menu;
+            int num = 0;
+            for (String i : newMenu.keySet()) {
+                num++;
+                System.out.println("#" + num + " Menu : " + i + " Price " + newMenu.get(i));
+            }
+        }
     }
 
+
+    public void deleteMenu() {
+
+        if (newMenu.size() <= 0) {
+            System.out.println("No Menu.");
+        } else {
+            allMenu();
+            System.out.print("Input the number to delete : ");
+            Scanner index = new Scanner(System.in);
+            int indexMenu = index.nextInt();
+            if (indexMenu > newMenu.size()) {
+                System.out.println("Out of index.");
+            } else {
+                String deleteName = name.get(indexMenu - 1);
+                name.remove(indexMenu - 1);
+                newMenu.remove(deleteName);
+            }
+        }
+    }
 }
