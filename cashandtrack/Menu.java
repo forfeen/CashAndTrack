@@ -4,45 +4,55 @@ import java.lang.String;
 
 public class Menu {
 
+    private String menuName;
+    private double menuPrice;
 
-    Map<String, Double> newMenu = new TreeMap<>();
-    List<String> name = new ArrayList<>();
 
-    public void newMenu(String menu, double price) {
-        name.add(menu);
-        newMenu.put(menu, price);
+    public Menu(String menu, double price) {
+        this.menuName = menu;
+        this.menuPrice = price;
     }
 
+    public double getMenuPrice() {
+        return this.menuPrice;
+    }
 
-    public void allMenu() {
-        if (newMenu.size() <= 0) {
-            System.out.println("No Menu.");
+    public String getMenuName() {
+        return this.menuName;
+    }
+
+    public String toString() {
+        return String.format("Menu : %s Price : %.2f", getMenuName(), getMenuPrice() );
+    }
+
+    public void showAllMenu(List<Menu> allMenu) {
+        if (allMenu.size() == 0){
+            System.out.println("No Menu");
         } else {
-            int num = 0;
-            for (String i : newMenu.keySet()) {
-                num++;
-                System.out.println("#" + num + " Menu : " + i + " Price " + newMenu.get(i));
+            int count = 0;
+            for (int i = 0; i <= allMenu.size() - 1; i++){
+                count ++ ;
+                String menu = String.format(count + ". " +allMenu.get(i).toString());
+                System.out.println(menu);
             }
         }
     }
 
 
-    public void deleteMenu() {
 
-        if (newMenu.size() <= 0) {
-            System.out.println("No Menu.");
-        } else {
-            allMenu();
-            System.out.print("Input the number to delete : ");
-            Scanner index = new Scanner(System.in);
-            int indexMenu = index.nextInt();
-            if (indexMenu > newMenu.size()) {
-                System.out.println("Out of index.");
-            } else {
-                String deleteName = name.get(indexMenu - 1);
-                name.remove(indexMenu - 1);
-                newMenu.remove(deleteName);
-            }
+    public void deleteMenu(int index, List<Menu> menu) {
+        if (index > menu.size()) {
+            System.out.println("Out of index.");
+        }
+        else {
+            menu.remove(index-1);
+            showAllMenu(menu);
         }
     }
+
+
 }
+
+
+
+

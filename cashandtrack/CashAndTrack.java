@@ -1,12 +1,17 @@
 package cashandtrack;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
 public class CashAndTrack {
 
-
+    private static String menuName;
+    private static double menuPrice;
+    private  static List<Menu> allMenu = new ArrayList<Menu>();
 
     public static void main(String[] args) {
+
         while (true) {
             System.out.print("(C)ustomer , (M)enu , (P)ayment : ");
 
@@ -14,7 +19,6 @@ public class CashAndTrack {
             String choose =  input.next();
 
             if (choose.equals("M".toLowerCase())) {
-                Menu menu = new Menu();
                 Scanner menuInput = new Scanner(System.in);
 
                 while (true) {
@@ -25,22 +29,34 @@ public class CashAndTrack {
                     if (chooseMenu.equals("A".toLowerCase())) {
                         Scanner addMenu = new Scanner(System.in);
                         System.out.print("Menu : ");
-                        String newMenu = addMenu.next();
+                        menuName = addMenu.next();
 
 
                         Scanner addPrice = new Scanner(System.in);
                         System.out.print("Price : ");
-                        double newPrice = addPrice.nextDouble();
-                        menu.newMenu(newMenu, newPrice);
+                        menuPrice = addPrice.nextDouble();
+                        Menu newMenu = new Menu(menuName, menuPrice);
+                        allMenu.add(newMenu);
+                        newMenu.showAllMenu(allMenu);
 
                     }
 
                     if (chooseMenu.equals("S".toLowerCase())) {
-                        menu.allMenu();
+                        Menu nM = new Menu(menuName, menuPrice);
+                        nM.showAllMenu(allMenu);
                     }
                     if (chooseMenu.equals("D".toLowerCase())) {
-                        menu.deleteMenu();
-                        menu.allMenu();
+                        Menu newMenu = new Menu(menuName, menuPrice);
+                        if (allMenu.size() == 0 ) {
+                            System.out.println("No Menu");
+                        } else {
+                            newMenu.showAllMenu(allMenu);
+                            Scanner numDelete = new Scanner(System.in);
+                            System.out.print("Input the number to delete : ");
+                            int index = numDelete.nextInt();
+                            newMenu.deleteMenu(index, allMenu);
+                        }
+
                     }
                 }
 
