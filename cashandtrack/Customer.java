@@ -3,50 +3,50 @@ import java.util.*;
 import java.lang.String;
 
 
+
 public class Customer {
 
+    private List<Menu> order = new ArrayList<>();
     private String customerName;
 
-    private List<String> allCustomer = new ArrayList<String>();
 
     public Customer(String name) {
         this.customerName = name;
     }
 
-    public int count()  {
-        return allCustomer.size();
+    public String getCustomerName() {
+        return this.customerName;
     }
 
-    public boolean addCustomerName(String name) {
-        allCustomer.add(name);
-        return true;
+    /** */
+    public void addOrder(Menu  menu){
+        order.add( menu);
+
     }
 
-    /**
-     *  To delete the customer's name
-     * @param index
-     * @return false if cannot delete the customer's name
-     */
-    public boolean deleteCustomerName(int index) {
-        if (index > allCustomer.size()) {
-            return false; }
-        else {
-            allCustomer.remove(index-1);
-        }return true;
-    }
-
-    /**
-     *  toString
-     * @return the customer's name
-     */
-    public String toString() {
-        String name = " ";
-        if (allCustomer.size() == 0){
-            name = "No Customer's name";
+    public void deleteOrder(int index) {
+        if (index > order.size()) {
+            System.out.println("Out of index");
         } else {
-            for (int i = 0; i < allCustomer.size()-1; i++){
-                name += allCustomer.get(i).toString() + ",";
-            } name += allCustomer.get(allCustomer.size()-1).toString();
-        } return name;
+            order.remove(index);
+        }
     }
+
+    public void showOrder() {
+        if (order.size() == 0) {
+            System.out.println("No order");
+        } else {
+            for (Menu allOrder : order) {
+                System.out.println("Order : " + allOrder);
+            }
+        }
+    }
+
+    public String toString() {
+        return String.format("Customer : ", getCustomerName() );
+    }
+
+
+
+
 }
