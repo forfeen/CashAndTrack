@@ -1,16 +1,18 @@
 package cashandtrack;
+import strategy.NormalPayment;
+import strategy.PaymentStrategy;
+import strategy.SilverPayment;
+
 import java.util.*;
 import java.lang.String;
-
-
 
 public class Customer {
 
     private List<Menu> order = new ArrayList<>();
     private String customerName;
+    private PaymentStrategy strategy = new NormalPayment();
 
-
-    public Customer(String name) {
+    public Customer(String name, double cost) {
         this.customerName = name;
     }
 
@@ -18,10 +20,27 @@ public class Customer {
         return this.customerName;
     }
 
+    public double getCost() {
+        double cost = 0 ;
+        for (Menu menuCost : order) {
+            cost += menuCost.getMenuPrice();
+        }
+        return cost;
+    }
+
+    //ราคาสุทธิ
+    public double netCost() {
+        return strategy.payment( getCost() );
+    }
+
+    public void setPaymentStrategy(PaymentStrategy strategy) {
+        this.strategy = strategy;
+    }
+
+
     /** */
     public void addOrder(Menu  menu){
-        order.add( menu);
-
+        order.add(menu);
     }
 
     public void deleteOrder(int index) {

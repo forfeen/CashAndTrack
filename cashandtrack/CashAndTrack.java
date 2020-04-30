@@ -1,10 +1,16 @@
 package cashandtrack;
 
+import strategy.GoldPayment;
+import strategy.PaymentStrategy;
+import strategy.PremiumPayment;
+import strategy.SilverPayment;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class CashAndTrack {
+
 
     private static List<Customer> allCustomer = new ArrayList<>();
     private  static List<Menu> allMenu = new ArrayList<Menu>();
@@ -117,7 +123,20 @@ public class CashAndTrack {
                         Scanner addCustomer = new Scanner(System.in);
                         System.out.print("Customer : ");
                         String customerName = addCustomer.next();
-                        Customer newCustomer = new Customer(customerName);
+
+                        Customer newCustomer = new Customer(customerName, 0.0);
+
+                        Scanner addLevel = new Scanner(System.in);
+                        System.out.println("(P)remium , (G)old, (S)ilver, (N)ormal \n Member : ");
+                        String customerLevel = addLevel.next().toUpperCase();
+                        if (customerLevel.equals("P")) {
+                            newCustomer.setPaymentStrategy(new PremiumPayment());
+                        } if (customerLevel.equals("G")) {
+                            newCustomer.setPaymentStrategy( new GoldPayment());
+                        } if (customerLevel.equals("S")) {
+                            newCustomer.setPaymentStrategy( new SilverPayment());
+                        }
+
                         allCustomer.add(newCustomer);
                     }if (customerChoice.equals("O")) {
                         if (allCustomer.size() == 0 || allMenu.size() == 0) {
@@ -152,18 +171,38 @@ public class CashAndTrack {
 
                             while (true) {
                                 Scanner choice = new Scanner(System.in);
-                                System.out.print("(D)elete order , (C)heck out  , (Q)uiz : ");
+                                System.out.print("(D)elete order , (C)heck out  , (Q)uit : ");
                                 String inputChoice = choice.next().toUpperCase();
                                 if ( inputChoice.equals("D")) {
-                                    //showAllCustomer(allCustomer);
                                     allCustomer.get(indexCustomer - 1).showOrder();
                                     Scanner inputIndex = new Scanner(System.in);
                                     System.out.print("Input the number to delete  : ");
                                     int indexDelete = inputIndex.nextInt();
                                     allCustomer.get( indexCustomer - 1).deleteOrder(indexDelete - 1);
+                                    allCustomer.get( indexCustomer - 1).showOrder();
 
                                 } if (inputChoice.equals("C")) {
-                                    System.out.println("f");
+                                    System.out.print("\nTotal cost : " + allCustomer.get(indexCustomer - 1).getCost());
+                                    while (true) {
+                                        Scanner askInput = new Scanner(System.in);
+                                        System.out.print("(C)onfirm , (Q)uit : ");
+                                        String  ask = askInput.next();
+                                        if (ask.equals("C")) {
+                                            Scanner receive = new Scanner(System.in);
+                                            System.out.print("Receive : ");
+                                            double receiveMoney = receive.nextDouble();
+                                            System.out.println("Total cost : " + allCustomer.get(indexCustomer - 1).getCost());
+
+                                            // เงินที่ลดแล้ว
+                                            System.out.println("Net. Cost : " + allCustomer.get( indexCustomer - 1).netCost());
+                                            // เงินทอน
+                                            double change = receiveMoney - allCustomer.get(indexCustomer - 1).netCost();
+                                            System.out.println("Change : " +  change);
+
+                                        } if (ask.equals("Q")) {
+                                            break;
+                                        }
+                                    }
                                 } if (inputChoice.equals("Q")) {
                                     break;
                                 }
