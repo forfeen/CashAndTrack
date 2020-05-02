@@ -1,7 +1,7 @@
-package cashandtrack;
+package cashandtrack.customer;
+import cashandtrack.menu.Menu;
 import strategy.NormalPayment;
 import strategy.PaymentStrategy;
-import strategy.SilverPayment;
 
 import java.util.*;
 import java.lang.String;

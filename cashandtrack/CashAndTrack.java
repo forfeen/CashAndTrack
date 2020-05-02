@@ -1,30 +1,34 @@
 package cashandtrack;
 
+
+import cashandtrack.customer.*;
+import cashandtrack.menu.*;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import strategy.GoldPayment;
 import strategy.PremiumPayment;
+import strategy.GoldPayment;
 import strategy.SilverPayment;
+import java.util.Scanner;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Scanner;
 
 public class CashAndTrack extends Application {
 
 
-    private static List<Customer> allCustomer = new ArrayList<>();
-    private  static List<Menu> allMenu = new ArrayList<Menu>();
+   public static List<Customer> allCustomer = new ArrayList<>();
+   public  static List<Menu> allMenu = new ArrayList<Menu>();
+
+
 
     public static void showAllCustomer(List<Customer> allCustomer) {
         if (allCustomer.size() == 0){
@@ -244,52 +248,44 @@ public class CashAndTrack extends Application {
 
     public void start(Stage stage) throws Exception {
         stage.setTitle("Cash & Track");
-        stage.setScene(initComponents());
-        stage.show();
-    }
 
-    private Scene initComponents() {
         FlowPane root = new FlowPane();
         root.setAlignment(Pos.CENTER);
-        root.setPadding( new Insets(10.0));
-        root.setPrefWrapLength(1000);
-        root.setHgap(10.0);
+        root.setPadding( new Insets(80));
+        root.setHgap(50);
+
+
+        Image menuPic = new Image("/images/menu.png");
+        ImageView menuC = new ImageView();
+        menuC.setImage(menuPic);
+        menuC.setFitWidth(100);
+        menuC.setFitHeight(100);
 
         Image customerPic = new Image("/images/people.png");
-        ImageView customer = new ImageView();
-        customer.setImage(customerPic);
-        customer.setFitHeight(100);
-        customer.setFitWidth(100);
-        customer.addEventHandler(MouseEvent.MOUSE_CLICKED, this::handleCustomerClicked );
+        ImageView customerC = new ImageView();
+        customerC.setImage(customerPic);
+        customerC.setFitHeight(100);
+        customerC.setFitWidth(100);
 
+        Button menu = new Button("", menuC);
+        menu.setStyle("-fx-focus-color: white;");
+        menu.setOnAction( e -> stage.setScene( new MenuScreen().menu()));
 
-        Image menuPic = new Image("/images/burger.png");
-        ImageView menu = new ImageView();
-        menu.setImage(menuPic);
-        menu.setFitWidth(100);
-        menu.setFitHeight(100);
-        menu.addEventHandler(MouseEvent.MOUSE_CLICKED, this::handleMenuClicked );
+        Button customer = new Button("", customerC);
+        customer.setStyle("-fx-focus-color: white;");
+        customer.setOnAction( e -> stage.setScene( new CustomerScreen().menu() ) );
 
-        root.getChildren().addAll(customer, menu);
-        VBox VB = new VBox(root);
-        Scene scene = new Scene(VB);
-        return scene;
-    }
-
-    public void customerScene(Stage stage) throws Exception {
-
+        root.getChildren().addAll(menu, customer);
+        VBox vb = new VBox(root);
+        Scene scene = new Scene(vb);
+        stage.setScene(scene);
+        stage.setHeight(350);
+        stage.setWidth(100);
+        stage.show();
 
     }
 
 
-    private void handleCustomerClicked(MouseEvent mouseEvent) {
-        System.out.println("d");
-        //start();
-    }
-
-    private void  handleMenuClicked(MouseEvent mouseEvent) {
-        System.out.println("s");
-    }
 
     public static void main(String[] args) {
         launch(args);

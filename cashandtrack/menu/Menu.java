@@ -1,4 +1,4 @@
-package cashandtrack;
+package cashandtrack.menu;
 import java.util.*;
 import java.lang.String;
 
