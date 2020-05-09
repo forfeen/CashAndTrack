@@ -17,65 +17,114 @@ import javafx.stage.Stage;
 import strategy.PremiumPayment;
 import strategy.GoldPayment;
 import strategy.SilverPayment;
+
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.Scanner;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class CashAndTrack extends Application {
+public class CashAndTrack extends Application{
 
 
    public static List<Customer> allCustomer = new ArrayList<>();
-   public  static List<Menu> allMenu = new ArrayList<Menu>();
+   public static List<Menu> allMenu = new ArrayList<Menu>();
 
 
 
-    public static void showAllCustomer(List<Customer> allCustomer) {
-        if (allCustomer.size() == 0){
-            System.out.println("No Customer");
-        } else {
-            int count = 0;
-            for (int i = 0; i <= allCustomer.size() - 1; i++){
-                count ++ ;
-                String customer = String.format(count + ". " + allCustomer.get(i).getCustomerName());
-                System.out.println(customer);
+//   public List<Menu> getAllMenu() {
+//       return this.allMenu;
+//   }
+//
+//    public List<Customer> getAllCustomer() {
+//        return this.allCustomer;
+//    }
+
+    public static List<Menu> getAllMenu() {
+        String line = "" ;
+        try {
+            BufferedReader x = new BufferedReader( new FileReader("txt/menu.csv"));
+            while ( (line = x.readLine()) != null) {
+
+                String[] y = line.split(",");
+                if (y[0].startsWith("#")) continue;
+                if (y[0].isEmpty()) continue;
+                Menu newMenu = new Menu(y[0], Double.parseDouble(y[1]));
+                allMenu.add(newMenu);
             }
-        }
-    }
 
-    public static void deleteCustomer(int index, List<Customer> customer) {
-        if (index > customer.size()) {
-            System.out.println("Out of index.");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        else {
-            customer.remove(index-1);
-            showAllCustomer(customer);
-        }
+        return allMenu;
     }
 
 
-    public static void showAllMenu(List<Menu> allMenu) {
-        if (allMenu.size() == 0){
-            System.out.println("No Menu");
-        } else {
-            int count = 0;
-            for (int i = 0; i <= allMenu.size() - 1; i++){
-                count ++ ;
-                String menu = String.format(count + ". " +allMenu.get(i).toString());
-                System.out.println(menu);
-            }
-        }
-    }
 
-    public static void deleteMenu(int index, List<Menu> menu) {
-        if (index > menu.size()) {
-            System.out.println("Out of index.");
-        }
-        else {
-            menu.remove(index-1);
-            showAllMenu(menu);
-        }
-    }
+//    public List<Customer> getCustomer() {
+//        String line = "";
+//        try {
+//            BufferedReader customer = new BufferedReader(new FileReader("/txt/customer.csv"));
+//            while ((line = customer.readLine()) != null) {
+//                String[] x = line.split(",");
+//                Customer newCustomer = new Customer(customerName, 0.0);
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace() ;
+//        }
+//        return allCustomer;
+//    }
+
+
+//    public static void showAllCustomer(List<Customer> allCustomer) {
+//        if (allCustomer.size() == 0){
+//            System.out.println("No Customer");
+//        } else {
+//            int count = 0;
+//            for (int i = 0; i <= allCustomer.size() - 1; i++){
+//                count ++ ;
+//                String customer = String.format(count + ". " + allCustomer.get(i).getCustomerName());
+//                System.out.println(customer);
+//            }
+//        }
+//    }
+
+//    public static void deleteCustomer(int index, List<Customer> customer) {
+//        if (index > customer.size()) {
+//            System.out.println("Out of index.");
+//        }
+//        else {
+//            customer.remove(index-1);
+//            showAllCustomer(customer);
+//        }
+//    }
+
+
+//    public static void showAllMenu(List<Menu> allMenu) {
+//        if (allMenu.size() == 0){
+//            System.out.println("No Menu");
+//        } else {
+//            int count = 0;
+//            for (int i = 0; i <= allMenu.size() - 1; i++){
+//                count ++ ;
+//                String menu = String.format(count + ". " +allMenu.get(i).toString());
+//                System.out.println(menu);
+//            }
+//        }
+//    }
+
+//    public static void deleteMenu(int index, List<Menu> menu) {
+//        if (index > menu.size()) {
+//            System.out.println("Out of index.");
+//        }
+//        else {
+//            menu.remove(index-1);
+//            showAllMenu(menu);
+//        }
+//    }
 
 
 //    public static void main(String[] args) {
@@ -247,11 +296,12 @@ public class CashAndTrack extends Application {
 
 
     public void start(Stage stage) throws Exception {
+
         stage.setTitle("Cash & Track");
 
         FlowPane root = new FlowPane();
         root.setAlignment(Pos.CENTER);
-        root.setPadding( new Insets(80));
+        root.setPadding( new Insets(55));
         root.setHgap(50);
 
 
@@ -269,7 +319,7 @@ public class CashAndTrack extends Application {
 
         Button menu = new Button("", menuC);
         menu.setStyle("-fx-focus-color: white;");
-        menu.setOnAction( e -> stage.setScene( new MenuScreen().menu()));
+        menu.setOnAction( e -> stage.setScene( new MenuScreen().initComponents()));
 
         Button customer = new Button("", customerC);
         customer.setStyle("-fx-focus-color: white;");
@@ -280,11 +330,10 @@ public class CashAndTrack extends Application {
         Scene scene = new Scene(vb);
         stage.setScene(scene);
         stage.setHeight(350);
-        stage.setWidth(100);
+        stage.setWidth(400);
         stage.show();
 
     }
-
 
 
     public static void main(String[] args) {

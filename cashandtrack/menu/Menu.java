@@ -1,4 +1,6 @@
 package cashandtrack.menu;
+import javafx.scene.control.CheckBox;
+
 import java.util.*;
 import java.lang.String;
 
@@ -6,7 +8,6 @@ public class Menu {
 
     private String menuName;
     private double menuPrice;
-
 
     public Menu(String menu, double price) {
         this.menuName = menu;
