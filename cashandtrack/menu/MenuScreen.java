@@ -1,5 +1,7 @@
 package cashandtrack.menu;
+
 import cashandtrack.CashAndTrack;
+import cashandtrack.cart.StoreSingleton;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -15,11 +17,17 @@ import javafx.stage.Stage;
 
 public class MenuScreen {
 
-    private TableView<Menu> table = new TableView<>();
+    private static StoreSingleton storeSingleton = StoreSingleton.getInstance();
+    public static TableView<Menu> tableMenu = new TableView<>();
     private TextField menuName;
     private TextField menuPrice;
-    private ObservableList<Menu> menu;
+    public static ObservableList<Menu> menu;
     private Menu menuObj = new Menu("Menu", 100);
+
+
+    public static TableView<Menu> getTableMenu() {
+        return tableMenu;
+    }
 
     public Scene initComponents() {
         ScrollPane sc = new ScrollPane();
@@ -33,6 +41,31 @@ public class MenuScreen {
         Label menuText = new Label("Menu");
         menuText.setFont(new Font("Arial" ,20));
 
+        Button addButton = new Button("Add new menu");
+        Button deleteButton = new Button("Delete menu");
+        addButton.setOnAction(this::addMenuScreen);
+        deleteButton.setOnAction(this::deleteMenu);
+
+        root.getChildren().addAll(menuText, showTableMenu(), addButton, deleteButton);
+        sc.setPrefViewportHeight(1000);
+        sc.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+        sc.setContent(root);
+        return new Scene( new VBox(sc));
+    }
+
+
+    public static ObservableList<Menu> getMenuList() {
+        return FXCollections.observableList(storeSingleton.getAllMenu());
+    }
+
+    private void deleteMenu(ActionEvent event){
+        Menu deleteMenu = tableMenu.getSelectionModel().getSelectedItem();
+        tableMenu.getItems().remove(deleteMenu);
+        storeSingleton.getAllMenu().remove(deleteMenu);
+    }
+
+
+    public static TableView<Menu> showTableMenu() {
         TableColumn nameColumn = new TableColumn("Menu Name");
         TableColumn priceColumn = new TableColumn("Price");
 
@@ -42,33 +75,11 @@ public class MenuScreen {
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("menuName"));
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("menuPrice"));
         menu = getMenuList();
-        table.setItems(menu);
+        tableMenu.setItems(menu);
 
-        table.getColumns().addAll(nameColumn, priceColumn);
-        Button addButton = new Button("Add new menu");
-        Button deleteButton = new Button("Delete menu");
-        addButton.setOnAction(this::addMenuScreen);
-        deleteButton.setOnAction(this::deleteMenu);
-
-        root.getChildren().addAll(menuText,table, addButton, deleteButton);
-        sc.setPrefViewportHeight(1000);
-        sc.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
-        sc.setContent(root);
-        return new Scene( new VBox(sc));
+        tableMenu.getColumns().addAll(nameColumn, priceColumn);
+        return tableMenu;
     }
-
-
-    private ObservableList<Menu> getMenuList() {
-        return FXCollections.observableList(CashAndTrack.getAllMenu());
-    }
-
-
-    private void deleteMenu(ActionEvent event){
-        Menu deleteMenu = table.getSelectionModel().getSelectedItem();
-        table.getItems().remove(deleteMenu);
-        CashAndTrack.allMenu.remove(deleteMenu);
-    }
-
 
     private void addMenuScreen(ActionEvent event) {
         try {
@@ -124,10 +135,9 @@ public class MenuScreen {
                     alert.setContentText("Menu already exist.");
                     alert.showAndWait();
                 } else {
-                    CashAndTrack.allMenu.add(newMenu);
+                    storeSingleton.getAllMenu().add(newMenu);
                 }
             }
-
         } catch (NumberFormatException e) {
             alert.setContentText("Please input name and price. ");
             alert.showAndWait();

@@ -1,6 +1,8 @@
 package cashandtrack.customer;
 
-import cashandtrack.CashAndTrack;
+import cashandtrack.cart.CartScreen;
+import cashandtrack.cart.StoreSingleton;
+import cashandtrack.menu.Menu;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -17,11 +19,19 @@ import javafx.stage.Stage;
 
 public class CustomerScreen {
 
-    private TableView<Customer> table = new TableView<>();
+    private StoreSingleton storeSingleton = StoreSingleton.getInstance();
+    private static Customer customerObj = new Customer("Name","Normal",0);
+    private TableView<Customer> customerTableView = new TableView<>();
+    private static TableView<Menu> cartTableView = new TableView<>();
+    private static ObservableList<Menu> customerCart;
     private ObservableList<Customer> customers;
     private TextField customerName;
     private String memberChoice[] = {"Normal", "Silver", "Gold", "Premium"};
-    private final String[] c = {memberChoice[0]};
+    private final String[] defaultChoice = {memberChoice[0]};
+
+    public static TableView<Menu> getCartTableView() {
+        return cartTableView;
+    }
 
     public Scene initComponents() {
         ScrollPane sc = new ScrollPane();
@@ -34,6 +44,20 @@ public class CustomerScreen {
         Label customerText = new Label("Customer");
         customerText.setFont( new Font("Arial", 20));
 
+        Button addButton = new Button("Add New Customer");
+        Button deleteButton = new Button("Delete Customer");
+        Button checkoutButton = new Button("Check Out");
+        addButton.setOnAction(this::addCustomerScreen);
+        deleteButton.setOnAction(this::deleteCustomer);
+
+        root.getChildren().addAll(customerText, showCustomerTable(), addButton, deleteButton, checkoutButton);
+        sc.setPrefViewportHeight(1000);
+        sc.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
+        sc.setContent(root);
+        return new Scene( new VBox(sc));
+    }
+
+    private TableView<Customer> showCustomerTable() {
         TableColumn nameColumn = new TableColumn("Customer Name");
         TableColumn memberColumn = new TableColumn("Member");
         TableColumn costColumn = new TableColumn("Total Cost");
@@ -44,53 +68,62 @@ public class CustomerScreen {
 
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("customerName"));
         memberColumn.setCellValueFactory(new PropertyValueFactory<>("member"));
-        costColumn.setCellValueFactory(new PropertyValueFactory<>("cost"));
-        countColumn.setCellValueFactory(new PropertyValueFactory<>("count"));
+//        costColumn.setCellValueFactory(new PropertyValueFactory<>("cost"));
+//        countColumn.setCellValueFactory(new PropertyValueFactory<>("count"));
 
         customers = getCustomerList();
-        table.setItems(customers);
+        customerTableView.setItems(customers);
 
-        table.getColumns().addAll(nameColumn, memberColumn, costColumn, countColumn);
-        table.setRowFactory(this::clickRow);
+        customerTableView.getColumns().addAll(nameColumn, memberColumn, costColumn, countColumn);
+        customerTableView.setRowFactory(this::clickRow);
+        return customerTableView;
+    }
 
-        Button addButton = new Button("Add New Customer");
-        Button deleteButton = new Button("Delete Customer");
-        Button checkoutButton = new Button("Check Out");
-        addButton.setOnAction(this::addCustomerScreen);
-        deleteButton.setOnAction(this::deleteCustomer);
 
-        root.getChildren().addAll(customerText, table, addButton, deleteButton, checkoutButton);
-        sc.setPrefViewportHeight(1000);
-        sc.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
-        sc.setContent(root);
-        return new Scene( new VBox(sc));
+    public static TableView<Menu> showCartTable() {
+        TableColumn nameColumn = new TableColumn("Menu Name");
+        TableColumn priceColumn = new TableColumn("Price");
+        nameColumn.setCellValueFactory( new PropertyValueFactory<>("menuName"));
+        priceColumn.setCellValueFactory( new PropertyValueFactory<>("price"));
+
+        cartTableView.setItems(customerCart);
+        cartTableView.getColumns().addAll(nameColumn, priceColumn);
+        return cartTableView;
+
     }
 
     private TableRow<Customer> clickRow(TableView<Customer> customerTableView) {
         TableRow<Customer> row = new TableRow<>();
         row.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
-//                Customer rowData = row.getItem();
-//                System.out.println(rowData);
-                System.out.println("d");
-                // เอาข้อมูล list ออกมา
+                customerObj = row.getItem();
+                int index = storeSingleton.getAllCustomer().indexOf(customerObj);
+                customerCart = FXCollections.observableList(storeSingleton.getAllCustomer().get(index).getOrder()) ;
+                try {
+                    CartScreen.addCartScene();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
         });
         return row ;
-
     }
 
     private ObservableList<Customer> getCustomerList() {
-        return FXCollections.observableList(CashAndTrack.getAllCustomer());
+        return FXCollections.observableList(storeSingleton.getAllCustomer());
+    }
+
+    public static Customer getCustomerObj() {
+        return customerObj;
     }
 
     public void deleteCustomer(ActionEvent event){
-        Customer deleteCustomer = table.getSelectionModel().getSelectedItem();
-        table.getItems().remove(deleteCustomer);
-        CashAndTrack.allCustomer.remove(deleteCustomer);
+        Customer deleteCustomer = customerTableView.getSelectionModel().getSelectedItem();
+        customerTableView.getItems().remove(deleteCustomer);
+        storeSingleton.getAllCustomer().remove(deleteCustomer);
     }
 
-    private  void  addCustomerScreen(ActionEvent event) {
+    private void addCustomerScreen(ActionEvent event) {
         String memberChoice[] = {"Normal", "Silver", "Gold", "Premium"};
         final String[] c = {memberChoice[0]};
         try {
@@ -105,7 +138,6 @@ public class CustomerScreen {
             customerName = new TextField();
 
             Label member = new Label("Member : ");
-            member.setStyle("-fx-line-spacing: 5;");
             ChoiceBox choiceBox = new ChoiceBox(FXCollections.observableArrayList(memberChoice));
             choiceBox.setValue(c[0]);
             choiceBox.getSelectionModel().selectedIndexProperty().addListener(this::changed);
@@ -129,8 +161,10 @@ public class CustomerScreen {
     }
 
     public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
-        c[0] = memberChoice[t1.intValue()];
+        defaultChoice[0] = memberChoice[t1.intValue()];
     }
+
+
 
     private void enterHandler(ActionEvent event){
         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -140,16 +174,17 @@ public class CustomerScreen {
                 alert.setContentText("Please input name");
                 alert.showAndWait();
             } else {
-                Customer newCustomer = new Customer(name, c[0], 0);
-                CashAndTrack.allCustomer.add(newCustomer);
+                Customer newCustomer = new Customer(name, defaultChoice[0], 0);
+                if (customerObj.equalsTo(newCustomer)) {
+                    alert.setContentText("Customer already exist.");
+                    alert.showAndWait();
+                } else {
+                    storeSingleton.getAllCustomer().add(newCustomer);
+                }
             }
         } catch (NullPointerException e) {
             alert.setContentText("Please input name");
             alert.showAndWait();
         }
     }
-
-
-
-
 }

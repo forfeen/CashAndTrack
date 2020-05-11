@@ -1,4 +1,4 @@
-package strategy;
+package payment;
 
 public class PremiumPayment implements PaymentStrategy {
 
