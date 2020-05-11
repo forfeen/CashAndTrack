@@ -1,6 +1,5 @@
 package cashandtrack;
 
-
 import cashandtrack.customer.*;
 import cashandtrack.menu.*;
 import javafx.application.Application;
@@ -10,73 +9,58 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import strategy.PremiumPayment;
-import strategy.GoldPayment;
-import strategy.SilverPayment;
-
 import java.io.BufferedReader;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
-import java.util.Scanner;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class CashAndTrack extends Application{
 
-
    public static List<Customer> allCustomer = new ArrayList<>();
    public static List<Menu> allMenu = new ArrayList<Menu>();
-
-
-
-//   public List<Menu> getAllMenu() {
-//       return this.allMenu;
-//   }
-//
-//    public List<Customer> getAllCustomer() {
-//        return this.allCustomer;
-//    }
 
     public static List<Menu> getAllMenu() {
         String line = "" ;
         try {
-            BufferedReader x = new BufferedReader( new FileReader("txt/menu.csv"));
-            while ( (line = x.readLine()) != null) {
+            if (allMenu.isEmpty()) {
+                BufferedReader x = new BufferedReader(new FileReader("txt/menu.csv"));
+                while ((line = x.readLine()) != null) {
 
-                String[] y = line.split(",");
-                if (y[0].startsWith("#")) continue;
-                if (y[0].isEmpty()) continue;
-                Menu newMenu = new Menu(y[0], Double.parseDouble(y[1]));
-                allMenu.add(newMenu);
+                    String[] y = line.split(",");
+                    if (y[0].startsWith("#")) continue;
+                    if (y[0].isEmpty()) continue;
+                    Menu newMenu = new Menu(y[0], Double.parseDouble(y[1]));
+                    allMenu.add(newMenu);
+                }
             }
-
         } catch (IOException e) {
             e.printStackTrace();
         }
         return allMenu;
     }
 
-
-
-//    public List<Customer> getCustomer() {
-//        String line = "";
-//        try {
-//            BufferedReader customer = new BufferedReader(new FileReader("/txt/customer.csv"));
-//            while ((line = customer.readLine()) != null) {
-//                String[] x = line.split(",");
-//                Customer newCustomer = new Customer(customerName, 0.0);
-//            }
-//        } catch (IOException e) {
-//            e.printStackTrace() ;
-//        }
-//        return allCustomer;
-//    }
+    public static List<Customer> getAllCustomer() {
+        String line = "";
+        try {
+            if (allCustomer.isEmpty()) {
+                BufferedReader customer = new BufferedReader(new FileReader("txt/customer.csv"));
+                while ((line = customer.readLine()) != null) {
+                    String[] x = line.split(",");
+                    if (x[0].startsWith("#")) continue;
+                    if (x[0].isEmpty()) continue;
+                    Customer newCustomer = new Customer(x[0], x[1], Double.parseDouble(x[2]));
+                    allCustomer.add(newCustomer);
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace() ;
+        }
+        return allCustomer;
+    }
 
 
 //    public static void showAllCustomer(List<Customer> allCustomer) {
@@ -294,7 +278,6 @@ public class CashAndTrack extends Application{
 //
 //    }
 
-
     public void start(Stage stage) throws Exception {
 
         stage.setTitle("Cash & Track");
@@ -303,7 +286,6 @@ public class CashAndTrack extends Application{
         root.setAlignment(Pos.CENTER);
         root.setPadding( new Insets(55));
         root.setHgap(50);
-
 
         Image menuPic = new Image("/images/menu.png");
         ImageView menuC = new ImageView();
@@ -323,18 +305,16 @@ public class CashAndTrack extends Application{
 
         Button customer = new Button("", customerC);
         customer.setStyle("-fx-focus-color: white;");
-        customer.setOnAction( e -> stage.setScene( new CustomerScreen().menu() ) );
+        customer.setOnAction( e -> stage.setScene( new CustomerScreen().initComponents()));
 
         root.getChildren().addAll(menu, customer);
         VBox vb = new VBox(root);
         Scene scene = new Scene(vb);
         stage.setScene(scene);
-        stage.setHeight(350);
+        stage.setHeight(550);
         stage.setWidth(400);
         stage.show();
-
     }
-
 
     public static void main(String[] args) {
         launch(args);

@@ -1,12 +1,11 @@
 package cashandtrack.menu;
-import javafx.scene.control.CheckBox;
 
-import java.util.*;
+import cashandtrack.CashAndTrack;
 import java.lang.String;
 
 public class Menu {
 
-    private String menuName;
+    private  String menuName;
     private double menuPrice;
 
     public Menu(String menu, double price) {
@@ -22,10 +21,21 @@ public class Menu {
         return this.menuName;
     }
 
-    public String toString() {
-        return String.format(" %s  %.2f", getMenuName(), getMenuPrice() );
+    public boolean equalsTo(Menu object) {
+        if (object == null) return false;
+        for (Menu menu : CashAndTrack.allMenu) {
+            if (menu.menuName.toLowerCase().equals(object.menuName.toLowerCase())) {
+                if (menu.menuPrice == object.menuPrice) {
+                    System.out.println(menu);
+                    return true;
+                }
+            }
+        } return false;
     }
 
+//    public String toString() {
+//        return String.format(" %s  %.2f", getMenuName(), getMenuPrice() );
+//    }
 
 }
 

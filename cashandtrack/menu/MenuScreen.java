@@ -1,6 +1,5 @@
 package cashandtrack.menu;
 import cashandtrack.CashAndTrack;
-import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -20,6 +19,7 @@ public class MenuScreen {
     private TextField menuName;
     private TextField menuPrice;
     private ObservableList<Menu> menu;
+    private Menu menuObj = new Menu("Menu", 100);
 
     public Scene initComponents() {
         ScrollPane sc = new ScrollPane();
@@ -37,7 +37,7 @@ public class MenuScreen {
         TableColumn priceColumn = new TableColumn("Price");
 
         nameColumn.setPrefWidth(170);
-        priceColumn.setPrefWidth(100);
+        priceColumn.setPrefWidth(120);
 
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("menuName"));
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("menuPrice"));
@@ -108,10 +108,6 @@ public class MenuScreen {
         String name = menuName.getText().trim();
         String price = menuPrice.getText().trim();
         try {
-            if (name.isEmpty() && price.isEmpty()) {
-                alert.setContentText("Please input name and price");
-                alert.showAndWait();
-            }
             if (name.isEmpty() && !price.isEmpty()) {
                 alert.setContentText("Please input name.");
                 alert.showAndWait();
@@ -119,17 +115,26 @@ public class MenuScreen {
             if (!name.isEmpty() && price.isEmpty()) {
                 alert.setContentText("Please input price");
                 alert.showAndWait();
-            } else {
+            }
+            else {
                 double priceMenu = Double.parseDouble(price);
                 Menu newMenu = new Menu(name, priceMenu);
-                CashAndTrack.allMenu.add(newMenu);
 
+                if (menuObj.equalsTo(newMenu)){
+                    alert.setContentText("Menu already exist.");
+                    alert.showAndWait();
+                } else {
+                    CashAndTrack.allMenu.add(newMenu);
+                }
             }
 
         } catch (NumberFormatException e) {
-
-        } catch (NullPointerException e) {
-
+            alert.setContentText("Please input name and price. ");
+            alert.showAndWait();
+        }
+        catch (NullPointerException e) {
+            alert.setContentText("Please input name and price");
+            alert.showAndWait();
         }
     }
 
