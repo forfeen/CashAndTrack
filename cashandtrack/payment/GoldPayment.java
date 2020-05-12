@@ -1,4 +1,4 @@
-package payment;
+package cashandtrack.payment;
 
 public class GoldPayment implements PaymentStrategy {
 

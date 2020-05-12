@@ -32,18 +32,18 @@ public class CartScreen {
 
         Button addButton = new Button("Add to cart");
         Button deleteButton = new Button("Delete order");
-        int index = storeSingleton.getAllCustomer().indexOf(CustomerScreen.getCustomerObj());
+        //int index = storeSingleton.getAllCustomer().indexOf(CustomerScreen.getCustomerObj());
         addButton.setOnAction( e->{
-            Menu addMenu = MenuScreen.getTableMenu().getSelectionModel().getSelectedItem();
-            storeSingleton.getAllCustomer().get(index).getOrder().add(addMenu);
+            Menu addMenu = MenuScreen.getMenuTableView().getSelectionModel().getSelectedItem();
+            storeSingleton.getAllCustomer().get(CustomerScreen.getIndexCustomer()).getOrder().add(addMenu);
         });
 
         deleteButton.setOnAction( event -> {
             Menu deleteMenu = CustomerScreen.getCartTableView().getSelectionModel().getSelectedItem();
-            storeSingleton.getAllCustomer().get(index).getOrder().remove(deleteMenu);
+            storeSingleton.getAllCustomer().get(CustomerScreen.getIndexCustomer()).getOrder().remove(deleteMenu);
         });
 
-        root.getChildren().addAll(cartText, CustomerScreen.showCartTable(), deleteButton,addButton, MenuScreen.showTableMenu() );
+        root.getChildren().addAll(cartText, CustomerScreen.getCartTableView(), deleteButton,addButton, MenuScreen.getMenuTableView());
         pane.setPrefViewportHeight(1000);
         pane.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         pane.setContent(root);

@@ -13,15 +13,10 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import java.util.ArrayList;
-import java.util.List;
 
 public class CashAndTrack extends Application{
 
-   public static List<Customer> allCustomer = new ArrayList<>();
-   public static List<Menu> allMenu = new ArrayList<Menu>();
    public static Stage stage = new Stage();
-
 
     public Stage componentsMainStage() throws Exception {
         FlowPane root = new FlowPane();
@@ -59,22 +54,27 @@ public class CashAndTrack extends Application{
         return stage;
     }
 
-    private void handlerCustomer (ActionEvent event) {
+
+
+    private void handlerCustomer(ActionEvent event) {
+        stage.setTitle("Customer");
         stage.setWidth(440);
         stage.setHeight(580);
         stage.setScene( new CustomerScreen().initComponents());
     }
 
     private void handlerMenu(ActionEvent event) {
+        stage.setTitle("Menu");
         stage.setHeight(570);
         stage.setScene( new MenuScreen().initComponents());
     }
-
+    
     public void start(Stage stage) throws Exception {
         componentsMainStage().show();
     }
-
+    
     public static void main(String[] args) {
         launch(args);
     }
+
 }

@@ -1,4 +1,4 @@
-package payment;
+package cashandtrack.payment;
 
 public interface PaymentStrategy {
 

@@ -1,6 +1,5 @@
 package cashandtrack.menu;
 
-import cashandtrack.CashAndTrack;
 import cashandtrack.cart.StoreSingleton;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -18,16 +17,9 @@ import javafx.stage.Stage;
 public class MenuScreen {
 
     private static StoreSingleton storeSingleton = StoreSingleton.getInstance();
-    public static TableView<Menu> tableMenu = new TableView<>();
+    public static TableView<Menu> menuTableView = new TableView<>();
     private TextField menuName;
     private TextField menuPrice;
-    public static ObservableList<Menu> menu;
-    private Menu menuObj = new Menu("Menu", 100);
-
-
-    public static TableView<Menu> getTableMenu() {
-        return tableMenu;
-    }
 
     public Scene initComponents() {
         ScrollPane sc = new ScrollPane();
@@ -43,42 +35,41 @@ public class MenuScreen {
 
         Button addButton = new Button("Add new menu");
         Button deleteButton = new Button("Delete menu");
+        Button backButton = new Button("Back");
         addButton.setOnAction(this::addMenuScreen);
         deleteButton.setOnAction(this::deleteMenu);
+        //backButton.setOnAction( this::handler );
 
-        root.getChildren().addAll(menuText, showTableMenu(), addButton, deleteButton);
+        root.getChildren().addAll(menuText, getMenuTableView(), addButton, deleteButton, backButton);
         sc.setPrefViewportHeight(1000);
         sc.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         sc.setContent(root);
         return new Scene( new VBox(sc));
     }
 
-
-    public static ObservableList<Menu> getMenuList() {
-        return FXCollections.observableList(storeSingleton.getAllMenu());
-    }
-
-    private void deleteMenu(ActionEvent event){
-        Menu deleteMenu = tableMenu.getSelectionModel().getSelectedItem();
-        tableMenu.getItems().remove(deleteMenu);
-        storeSingleton.getAllMenu().remove(deleteMenu);
-    }
-
-
-    public static TableView<Menu> showTableMenu() {
+    private static TableView<Menu> showTableMenu() {
         TableColumn nameColumn = new TableColumn("Menu Name");
         TableColumn priceColumn = new TableColumn("Price");
-
         nameColumn.setPrefWidth(170);
         priceColumn.setPrefWidth(120);
-
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("menuName"));
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("menuPrice"));
-        menu = getMenuList();
-        tableMenu.setItems(menu);
+        ObservableList<Menu> menu = FXCollections.observableList(storeSingleton.getAllMenu());
+        //ถ้าลบหมดล้ะ
+        if (menuTableView.getItems().size() == 0  ){
+            menuTableView.setItems(menu);
+            menuTableView.getColumns().addAll(nameColumn, priceColumn);
+        }
+        if (menuTableView.getColumns().size() > 2) {
+            menuTableView.getItems().clear();
+            menuTableView.setItems(menu);
+            menuTableView.getColumns().addAll(nameColumn, priceColumn);
+        };
+        return menuTableView;
+    }
 
-        tableMenu.getColumns().addAll(nameColumn, priceColumn);
-        return tableMenu;
+    public static TableView<Menu> getMenuTableView() {
+        return showTableMenu();
     }
 
     private void addMenuScreen(ActionEvent event) {
@@ -108,10 +99,15 @@ public class MenuScreen {
             stage.setWidth(350);
             stage.setHeight(200);
             stage.show();
-
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+    }
+
+    private void deleteMenu(ActionEvent event){
+        Menu deleteMenu = menuTableView.getSelectionModel().getSelectedItem();
+        menuTableView.getItems().remove(deleteMenu);
+        storeSingleton.getAllMenu().remove(deleteMenu);
     }
 
     private void enterHandler(ActionEvent event) {
@@ -131,7 +127,7 @@ public class MenuScreen {
                 double priceMenu = Double.parseDouble(price);
                 Menu newMenu = new Menu(name, priceMenu);
 
-                if (menuObj.equalsTo(newMenu)){
+                if (storeSingleton.getAllMenu().get(0).equalsTo(newMenu)){
                     alert.setContentText("Menu already exist.");
                     alert.showAndWait();
                 } else {
@@ -147,5 +143,4 @@ public class MenuScreen {
             alert.showAndWait();
         }
     }
-
 }

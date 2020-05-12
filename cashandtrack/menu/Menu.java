@@ -1,10 +1,13 @@
 package cashandtrack.menu;
 
 import cashandtrack.CashAndTrack;
+import cashandtrack.cart.StoreSingleton;
+
 import java.lang.String;
 
 public class Menu {
 
+    private static StoreSingleton storeSingleton = StoreSingleton.getInstance();
     private String menuName;
     private double menuPrice;
 
@@ -23,7 +26,7 @@ public class Menu {
 
     public boolean equalsTo(Menu object) {
         if (object == null) return false;
-        for (Menu menu : CashAndTrack.allMenu) {
+        for (Menu menu : storeSingleton.getAllMenu()) {
             if (menu.getMenuName().toLowerCase().equals(object.getMenuName().toLowerCase())) {
                 if (menu.getMenuPrice() == object.getMenuPrice()) {
                     return true;

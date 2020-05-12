@@ -1,12 +1,14 @@
 package cashandtrack.customer;
 import cashandtrack.CashAndTrack;
+import cashandtrack.cart.StoreSingleton;
 import cashandtrack.menu.Menu;
-import payment.*;
+import cashandtrack.payment.*;
 import java.util.*;
 import java.lang.String;
 
 public class Customer {
 
+    private static StoreSingleton storeSingleton = StoreSingleton.getInstance();
     private List<Menu> order = new ArrayList<>();
     private String customerName;
     private String member;
@@ -52,7 +54,7 @@ public class Customer {
 
 //    //ราคาสุทธิ
 //    public double netCost() {
-//        return strategy.payment( getCost() );
+//        return strategy.cashandtrack.payment( getCost() );
 //    }
 
     public void setPaymentStrategy(PaymentStrategy strategy) {
@@ -61,7 +63,7 @@ public class Customer {
 
     public boolean equalsTo(Customer object) {
         if (object == null) return false;
-        for (Customer customer: CashAndTrack.allCustomer) {
+        for (Customer customer: storeSingleton.getAllCustomer()) {
             if (customer.getCustomerName().toLowerCase().equals(object.getCustomerName().toLowerCase())) {
                 if (customer.getMember().equals(object.getMember())) {
                     return true;
