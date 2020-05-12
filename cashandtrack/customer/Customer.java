@@ -12,12 +12,15 @@ public class Customer {
     private List<Menu> order = new ArrayList<>();
     private String customerName;
     private String member;
+    private double cost;
+    private String discount;
 
     private PaymentStrategy strategy = new NormalPayment();
 
     public Customer(String name,String member, double cost) {
         this.customerName = name;
         this.member = member;
+        this.cost = getTotalCost();
     }
 
     public double getTotalCost() {
@@ -33,6 +36,10 @@ public class Customer {
 
     public String getCustomerName() {
         return this.customerName;
+    }
+
+    public int getCountOrder() {
+        return getOrder().size();
     }
 
     public String getMember() {
@@ -52,10 +59,26 @@ public class Customer {
         return this.member;
     }
 
-//    //ราคาสุทธิ
-//    public double netCost() {
-//        return strategy.cashandtrack.payment( getCost() );
-//    }
+    public String getDiscount() {
+        switch (member) {
+            case "Premium" :
+                discount = "Discount 7%";
+                break;
+            case "Gold":
+                discount = "Discount 5%";
+                break;
+            case "Silver":
+                discount = "Discount 2%";
+                break;
+            default:
+                discount = "No Discount";
+        }
+        return discount;
+    }
+
+    public double netCost() {
+        return strategy.payment(getTotalCost());
+    }
 
     public void setPaymentStrategy(PaymentStrategy strategy) {
         this.strategy = strategy;

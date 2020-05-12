@@ -4,6 +4,7 @@ import cashandtrack.customer.*;
 import cashandtrack.menu.*;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -54,11 +55,9 @@ public class CashAndTrack extends Application{
         return stage;
     }
 
-
-
     private void handlerCustomer(ActionEvent event) {
         stage.setTitle("Customer");
-        stage.setWidth(440);
+        stage.setWidth(400);
         stage.setHeight(580);
         stage.setScene( new CustomerScreen().initComponents());
     }
@@ -68,6 +67,10 @@ public class CashAndTrack extends Application{
         stage.setHeight(570);
         stage.setScene( new MenuScreen().initComponents());
     }
+
+//    public static void handler(ActionEvent event) {
+//        stage.show();
+//    }
     
     public void start(Stage stage) throws Exception {
         componentsMainStage().show();
@@ -76,5 +79,4 @@ public class CashAndTrack extends Application{
     public static void main(String[] args) {
         launch(args);
     }
-
 }

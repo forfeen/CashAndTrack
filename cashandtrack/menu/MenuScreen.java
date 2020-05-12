@@ -55,7 +55,6 @@ public class MenuScreen {
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("menuName"));
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("menuPrice"));
         ObservableList<Menu> menu = FXCollections.observableList(storeSingleton.getAllMenu());
-        //ถ้าลบหมดล้ะ
         if (menuTableView.getItems().size() == 0  ){
             menuTableView.setItems(menu);
             menuTableView.getColumns().addAll(nameColumn, priceColumn);
