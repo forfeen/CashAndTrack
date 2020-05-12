@@ -87,14 +87,16 @@ public class CustomerScreen {
 
     private static TableView<Menu> cartTableView () {
         TableColumn nameColumn = new TableColumn("Menu Name");
-        TableColumn priceColumn = new TableColumn("Price");
+        //TableColumn priceColumn = new TableColumn("Price");
         nameColumn.setPrefWidth(170);
-        priceColumn.setPrefWidth(120);
+        //priceColumn.setPrefWidth(120);
         nameColumn.setCellValueFactory( new PropertyValueFactory<>("menuName"));
-        priceColumn.setCellValueFactory( new PropertyValueFactory<>("price"));
+        //priceColumn.setCellValueFactory( new PropertyValueFactory<>("price"));
         cartTableView.getColumns().clear();
         cartTableView.setItems(getCustomerCartList());
-        cartTableView.getColumns().addAll(nameColumn, priceColumn);
+//        cartTableView.getColumns().addAll(nameColumn, priceColumn);
+        cartTableView.getColumns().addAll(nameColumn);
+
         return cartTableView;
     }
 
