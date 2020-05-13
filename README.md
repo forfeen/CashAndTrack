@@ -15,7 +15,7 @@ The application requires
 * [Java SE Development 11](https://www.oracle.com/java/technologies/javase-jdk11-downloads.html)
 * [JavaFX Library](https://www.oracle.com/java/technologies/install-javafx-sdk.html)
 
-# Installation
+# Installations
 1. Clone this repository then go to the directory.
 ```
  $ git clone https://github.com/forfeen/CashAndTrack.git
@@ -28,6 +28,44 @@ $ cd CashAndTrack
 ```
 $ java @vmargs -jar CashAndTrack.jar
 ```
+# Usage
+First, you have to choose the menu or customer feature.
+
+![](images/main.png)
+
+ In the menu screen , you can see all menus in the table.
+ 
+ If you want to delete the menu , select the row and click **Delete Menu** button.
+ 
+ ![](images/menu-table.png) 
+ 
+ And you can add the menu by click the **Add new menu** button.
+ 
+ ![](images/add-menu.png)
+ 
+ In the customer screen , you can see all  customers in the table.
+ 
+ 
+ Click  **Add New Customer** button to add new customer , select the row and click
+  **Delete Menu** button to delete the customer.
+ 
+ ![](images/customer-table.png)
+ 
+ Double-click on the customer's row to add menu to cart.
+ 
+ ![](images/add-cart.png)
+ 
+ Select the customer's row and click **Check out** button to check out. 
+  
+  Enter in the text field and press **ENTER** key
+ 
+ ![](images/ckeckout.png)
+ 
+ 
+ ![](images/change.png)
+ 
+
+
 
 ### Author
 Chananya Photan  61160545481
