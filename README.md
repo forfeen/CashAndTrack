@@ -20,12 +20,9 @@ git clone https://github.com/forfeen/CashAndTrack.git
 cd CashAndTrack
 ```
 2. Compile the CashAndTrack.jar
-```$xslt
+```
 java @vmargs -jar CashAndTrack.jar
 ```
-
-
-
 # Usage
 
 ### Created by

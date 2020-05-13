@@ -56,11 +56,10 @@ public class CustomerScreen {
         Button addButton = new Button("Add New Customer");
         Button deleteButton = new Button("Delete Customer");
         Button checkoutButton = new Button("Check Out");
-//        Button menuButton = new Button("Go to Menu");
+
         addButton.setOnAction(this::addCustomerScreen);
         deleteButton.setOnAction(this::deleteCustomer);
         checkoutButton.setOnAction(this::paymentScreen);
-//        menuButton.setOnAction(CashAndTrack.handler(eventHandler));
 
         root.getChildren().addAll(customerText, getCustomerTableView(), addButton, deleteButton, checkoutButton);
         pane.setPrefViewportHeight(1000);
@@ -92,20 +91,18 @@ public class CustomerScreen {
     private TableView<Customer> customerTableView() {
         TableColumn nameColumn = new TableColumn("Customer Name");
         TableColumn memberColumn = new TableColumn("Member");
-        TableColumn costColumn = new TableColumn("Total Cost");
 
         nameColumn.setPrefWidth(130);
-        memberColumn.setPrefWidth(100);
-        costColumn.setPrefWidth(100);
+        memberColumn.setPrefWidth(130);
 
         nameColumn.setCellValueFactory(new PropertyValueFactory<>("customerName"));
         memberColumn.setCellValueFactory(new PropertyValueFactory<>("member"));
-        costColumn.setCellValueFactory(new PropertyValueFactory<>("cost"));
 
         customersObservableList = getCustomerList();
         customerTableView.getColumns().clear();
         customerTableView.setItems(customersObservableList);
-        customerTableView.getColumns().addAll(nameColumn, memberColumn, costColumn);
+
+        customerTableView.getColumns().addAll(nameColumn, memberColumn);
         customerTableView.setRowFactory(this::clickRow);
         return customerTableView;
     }
@@ -116,14 +113,10 @@ public class CustomerScreen {
      * */
     private static TableView<Menu> cartTableView () {
         TableColumn nameColumn = new TableColumn("Menu Name");
-        //TableColumn priceColumn = new TableColumn("Price");
-        nameColumn.setPrefWidth(170);
-        //priceColumn.setPrefWidth(120);
+        nameColumn.setPrefWidth(250);
         nameColumn.setCellValueFactory( new PropertyValueFactory<>("menuName"));
-        //priceColumn.setCellValueFactory( new PropertyValueFactory<>("price"));
         cartTableView.getColumns().clear();
         cartTableView.setItems(getCustomerCartList());
-//        cartTableView.getColumns().addAll(nameColumn, priceColumn);
         cartTableView.getColumns().addAll(nameColumn);
         return cartTableView;
     }
