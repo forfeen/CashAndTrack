@@ -1,6 +1,6 @@
-package cashandtrack.menu;
-
-import cashandtrack.cart.StoreSingleton;
+package cashandtrack.screen;
+import cashandtrack.StoreSingleton;
+import cashandtrack.Menu;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -14,13 +14,21 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
+/** The stage of Menu feature*/
 public class MenuScreen {
 
+    /** create an object of StoreSingleton */
     private static StoreSingleton storeSingleton = StoreSingleton.getInstance();
+    /** the table of all menu */
     public static TableView<Menu> menuTableView = new TableView<>();
+    /** the text field of menu's name */
     private TextField menuName;
+    /** the text field of menu's price */
     private TextField menuPrice;
+    /** the alert box */
+    private Alert alert = new Alert(Alert.AlertType.ERROR);
 
+    /** the components of menu scene */
     public Scene initComponents() {
         ScrollPane sc = new ScrollPane();
         FlowPane root = new FlowPane();
@@ -47,6 +55,10 @@ public class MenuScreen {
         return new Scene( new VBox(sc));
     }
 
+    /**
+     * create the table of all menu
+     * @return the menu's table
+     * */
     private static TableView<Menu> showTableMenu() {
         TableColumn nameColumn = new TableColumn("Menu Name");
         TableColumn priceColumn = new TableColumn("Price");
@@ -67,10 +79,18 @@ public class MenuScreen {
         return menuTableView;
     }
 
+    /**
+     * To get the menu table
+     * @return menu's table
+     * */
     public static TableView<Menu> getMenuTableView() {
         return showTableMenu();
     }
 
+    /**
+     * the stage of add menu feature
+     * @param event
+     */
     private void addMenuScreen(ActionEvent event) {
         try {
             FlowPane pane = new FlowPane();
@@ -99,16 +119,25 @@ public class MenuScreen {
             stage.setHeight(200);
             stage.show();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            alert.setContentText("Error");
+            alert.showAndWait();
         }
     }
 
+    /**
+     * To delete the menu on the table
+     * @param event
+     * */
     private void deleteMenu(ActionEvent event){
         Menu deleteMenu = menuTableView.getSelectionModel().getSelectedItem();
         menuTableView.getItems().remove(deleteMenu);
         storeSingleton.getAllMenu().remove(deleteMenu);
     }
 
+    /**
+     * To handle when click ENTER button
+     * @param event
+     */
     private void enterHandler(ActionEvent event) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         String name = menuName.getText().trim();

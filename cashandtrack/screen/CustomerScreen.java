@@ -1,8 +1,7 @@
-package cashandtrack.customer;
-
-import cashandtrack.cart.*;
-import cashandtrack.menu.Menu;
-import cashandtrack.payment.PaymentScreen;
+package cashandtrack.screen;
+import cashandtrack.StoreSingleton;
+import cashandtrack.Customer;
+import cashandtrack.Menu;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -15,20 +14,34 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 
+/** The stage of Customer feature*/
 public class CustomerScreen {
 
+    /** create an object of StoreSingleton */
     private static StoreSingleton storeSingleton = StoreSingleton.getInstance();
+    /** create an object of Customer */
     private static Customer customerObj = new Customer("Name","Normal",0);
-    private TableView<Customer> customerTableView = new TableView<>();
+    /** the table of all order in cart  */
     private static TableView<Menu> cartTableView = new TableView<>();
+    /** the table of all customer */
+    private TableView<Customer> customerTableView = new TableView<>();
+    /** the observable list of cart */
     private static ObservableList<Menu> customerCartObservableList;
+    /** the observable list of customer */
     private ObservableList<Customer> customersObservableList;
+    /** the index of customer in list */
     private static int index = 0;
-    private TextField customerName;
+    /** the choice to select the membership levels */
     private String memberChoice[] = {"Normal", "Silver", "Gold", "Premium"};
-    private final String[] defaultChoice = {memberChoice[0]};
+    /** default choice of the membership levels */
+    private String[] defaultChoice = {memberChoice[0]};
+    /** the text field of customer name */
+    private TextField customerName;
+    /** the alert box */
+    private Alert alert = new Alert(Alert.AlertType.ERROR);
 
 
+    /** the components of customer scene */
     public Scene initComponents() {
         ScrollPane pane = new ScrollPane();
         FlowPane root = new FlowPane();
@@ -56,14 +69,26 @@ public class CustomerScreen {
         return new Scene( new VBox(pane));
     }
 
+    /**
+     * To get the customer table
+     * @return customer's table
+     * */
     public TableView<Customer> getCustomerTableView() {
         return customerTableView();
     }
 
+    /**
+     * To get the cart table
+     * @return cart's table
+     * */
     public static TableView<Menu> getCartTableView() {
         return cartTableView();
     }
 
+    /**
+     * create the table of all customer
+     * @return the customer's table
+     * */
     private TableView<Customer> customerTableView() {
         TableColumn nameColumn = new TableColumn("Customer Name");
         TableColumn memberColumn = new TableColumn("Member");
@@ -85,6 +110,10 @@ public class CustomerScreen {
         return customerTableView;
     }
 
+    /**
+     * create the table of cart
+     * @return the cart's table
+     * */
     private static TableView<Menu> cartTableView () {
         TableColumn nameColumn = new TableColumn("Menu Name");
         //TableColumn priceColumn = new TableColumn("Price");
@@ -96,10 +125,12 @@ public class CustomerScreen {
         cartTableView.setItems(getCustomerCartList());
 //        cartTableView.getColumns().addAll(nameColumn, priceColumn);
         cartTableView.getColumns().addAll(nameColumn);
-
         return cartTableView;
     }
 
+    /**
+     * to get the selected row
+     * @return the selected row */
     private TableRow<Customer> clickRow(TableView<Customer> customerTableView) {
         TableRow<Customer> row = new TableRow<>();
         row.setOnMouseClicked(event -> {
@@ -117,44 +148,69 @@ public class CustomerScreen {
         return row ;
     }
 
+    /**
+     *  to get the observable list of cart's table
+     * @return the observable list of cart's table
+     */
     public static ObservableList<Menu> getCustomerCartList() {
         return customerCartObservableList;
     }
 
+    /**
+     *  to get the observable list of customer's table
+     * @return the observable list of customer's table
+     */
     private ObservableList<Customer> getCustomerList() {
         return FXCollections.observableList(storeSingleton.getAllCustomer());
     }
 
+    /**
+     * to get the index of customer in list
+     * @return the index
+     */
     public static int getIndexCustomer() {
         return index;
     }
 
+    /**
+     * to handle when click check out button
+     */
     public void paymentScreen(ActionEvent event) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
-
         if (getCustomerCartList() == null) {
-            alert.setTitle("Check Out");
+            alert.setTitle("Check out");
+            alert.setContentText("Cart is Empty");
+            alert.showAndWait();
+        } if (storeSingleton.getAllCustomer().get(index).getTotalCost() == 0) {
+            alert.setTitle("Check out");
             alert.setContentText("Cart is Empty");
             alert.showAndWait();
         } else {
             try {
                 PaymentScreen.checkoutScene();
             } catch (Exception e) {
-                e.printStackTrace();
+                alert.setContentText("Error");
+                alert.showAndWait();
             }
         }
     }
 
+    /** to delete the selected customer */
     public void deleteCustomer(ActionEvent event){
         Customer deleteCustomer = customerTableView.getSelectionModel().getSelectedItem();
         customerTableView.getItems().remove(deleteCustomer);
         storeSingleton.getAllCustomer().remove(deleteCustomer);
     }
 
+    /** to set the selected membership levels box */
     public void changed(ObservableValue<? extends Number> observableValue, Number number, Number t1) {
         defaultChoice[0] = memberChoice[t1.intValue()];
     }
 
+    /**
+     * the stage of add customer feature
+     * @param event
+     */
     private void addCustomerScreen(ActionEvent event) {
         String memberChoice[] = {"Normal", "Silver", "Gold", "Premium"};
         final String[] c = {memberChoice[0]};
@@ -198,12 +254,16 @@ public class CustomerScreen {
             stage.setWidth(450);
             stage.show();
         } catch (Exception ex) {
-            ex.printStackTrace();
+            alert.setContentText("Error");
+            alert.showAndWait();
         }
     }
 
+    /**
+     * To handle when click ENTER button
+     * @param event
+     */
     private void enterHandler(ActionEvent event){
-        Alert alert = new Alert(Alert.AlertType.ERROR);
         String name = customerName.getText().trim();
         try {
             if (name.isEmpty()) {

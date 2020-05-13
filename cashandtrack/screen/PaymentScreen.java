@@ -1,8 +1,6 @@
-package cashandtrack.payment;
-
-import cashandtrack.cart.StoreSingleton;
-import cashandtrack.customer.CustomerScreen;
-import cashandtrack.menu.Menu;
+package cashandtrack.screen;
+import cashandtrack.StoreSingleton;
+import cashandtrack.Menu;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -18,16 +16,25 @@ import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import java.util.List;
 
+/** The stage of Payment feature*/
 public class PaymentScreen {
 
+    /** create an object of StoreSingleton */
     private static StoreSingleton storeSingleton = StoreSingleton.getInstance();
+    /** the membership levels of customer */
     private static String member =  storeSingleton.getAllCustomer().get(CustomerScreen.getIndexCustomer()).getMember();
+    /** the discount message */
     private static String discount = storeSingleton.getAllCustomer().get(CustomerScreen.getIndexCustomer()).getDiscount();
+    /** the total cost of order */
     private static double totalCost = storeSingleton.getAllCustomer().get(CustomerScreen.getIndexCustomer()).getTotalCost();
+    /** the net cost after discount */
     private static double netCost = storeSingleton.getAllCustomer().get(CustomerScreen.getIndexCustomer()).netCost();
+    /** the list of order */
     private static List<Menu> order = storeSingleton.getAllCustomer().get(CustomerScreen.getIndexCustomer()).getOrder();
+   /** the text field of receive money */
     private static TextField receive;
 
+    /** the check out scene */
     public static void checkoutScene() throws Exception {
         FlowPane root = new FlowPane();
         VBox vBox =  new VBox();
@@ -59,7 +66,6 @@ public class PaymentScreen {
         receive = new TextField();
         receive.setOnKeyPressed(PaymentScreen::handlerEnter);
 
-
         vBox.setAlignment(Pos.CENTER);
         hBox.setAlignment(Pos.CENTER);
         hBoxReceive.setAlignment(Pos.CENTER);
@@ -77,21 +83,21 @@ public class PaymentScreen {
         stage.show();
     }
 
+    /** the handle when press ENTER key */
     private static void handlerEnter(KeyEvent e) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         if (e.getCode() == KeyCode.ENTER) {
             String receiveText = receive.getText().trim();
             if (receiveText.isEmpty()) {
                 alert.setContentText("Please input the receive");
-            } else {
-                System.out.println(receiveText);
+            }  else {
                 double receiveValue = Double.parseDouble(receiveText);
                 if (netCost > receiveValue) {
                     alert.setContentText("The receive is not enough.");
                     alert.show();
-                } else {
+                } if (receiveValue > netCost) {
                     double change = receiveValue - netCost;
-                    String changeTxt = String.format("Change : %.2f  \"Thank you !\"", change);
+                    String changeTxt = String.format("Change : %.2f  Thank you !", change);
                     order.clear();
                     alert.setAlertType(Alert.AlertType.INFORMATION);
                     alert.setContentText(changeTxt);

@@ -1,10 +1,8 @@
 package cashandtrack;
-
-import cashandtrack.customer.*;
-import cashandtrack.menu.*;
+import cashandtrack.screen.CustomerScreen;
+import cashandtrack.screen.MenuScreen;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -15,10 +13,14 @@ import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+/** The application to improve the performance
+ * of the ordering, billing order and billing payment.*/
 public class CashAndTrack extends Application{
 
+    /** create the stage */
    public static Stage stage = new Stage();
 
+    /** the main stage of the application */
     public Stage componentsMainStage() throws Exception {
         FlowPane root = new FlowPane();
         root.setAlignment(Pos.CENTER);
@@ -55,6 +57,7 @@ public class CashAndTrack extends Application{
         return stage;
     }
 
+    /** to handle when clicked Customer button*/
     private void handlerCustomer(ActionEvent event) {
         stage.setTitle("Customer");
         stage.setWidth(400);
@@ -62,16 +65,14 @@ public class CashAndTrack extends Application{
         stage.setScene( new CustomerScreen().initComponents());
     }
 
+    /** to handle when clicked menu button*/
     private void handlerMenu(ActionEvent event) {
         stage.setTitle("Menu");
         stage.setHeight(570);
         stage.setScene( new MenuScreen().initComponents());
     }
 
-//    public static void handler(ActionEvent event) {
-//        stage.show();
-//    }
-    
+    /** to show the stage */
     public void start(Stage stage) throws Exception {
         componentsMainStage().show();
     }
