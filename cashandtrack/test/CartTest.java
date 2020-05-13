@@ -15,11 +15,11 @@ public class CartTest {
     private static StoreSingleton storeSingleton = StoreSingleton.getInstance();
     /** initial list of order */
     private List<Menu> cart = storeSingleton.getAllCustomer().get(0).getOrder();
-    /** initial the menu  */
+    /** initial the menu */
     private Menu pasta;
-    /** initial the menu  */
+    /** initial the menu */
     private Menu pizza;
-    /** initial the menu  */
+    /** initial the menu */
     private Menu salad;
 
     /** set the menu */

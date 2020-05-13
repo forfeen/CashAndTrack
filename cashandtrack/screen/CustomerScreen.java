@@ -127,10 +127,15 @@ public class CustomerScreen {
     private TableRow<Customer> clickRow(TableView<Customer> customerTableView) {
         TableRow<Customer> row = new TableRow<>();
         row.setOnMouseClicked(event -> {
-            if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
+            if (event.getClickCount() == 1 && (! row.isEmpty())) {
                 customerObj = row.getItem();
                 index = storeSingleton.getAllCustomer().indexOf(customerObj);
                 customerCartObservableList = FXCollections.observableList(storeSingleton.getAllCustomer().get(index).getOrder()) ;
+            }
+            if (event.getClickCount() == 2 && (! row.isEmpty()) ) {
+                customerObj = row.getItem();
+//                index = storeSingleton.getAllCustomer().indexOf(customerObj);
+//                customerCartObservableList = FXCollections.observableList(storeSingleton.getAllCustomer().get(index).getOrder()) ;
                 try {
                     CartScreen.addCartScene();
                 } catch (Exception e) {

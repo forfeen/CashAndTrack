@@ -22,20 +22,24 @@ public class PaymentScreen {
     /** create an object of StoreSingleton */
     private static StoreSingleton storeSingleton = StoreSingleton.getInstance();
     /** the membership levels of customer */
-    private static String member =  storeSingleton.getAllCustomer().get(CustomerScreen.getIndexCustomer()).getMember();
+    private static String member;
     /** the discount message */
-    private static String discount = storeSingleton.getAllCustomer().get(CustomerScreen.getIndexCustomer()).getDiscount();
+    private static String discount;
     /** the total cost of order */
-    private static double totalCost = storeSingleton.getAllCustomer().get(CustomerScreen.getIndexCustomer()).getTotalCost();
+    private static double totalCost;
     /** the net cost after discount */
-    private static double netCost = storeSingleton.getAllCustomer().get(CustomerScreen.getIndexCustomer()).netCost();
+    private static double netCost;
     /** the list of order */
-    private static List<Menu> order = storeSingleton.getAllCustomer().get(CustomerScreen.getIndexCustomer()).getOrder();
+    private static List<Menu> order;
    /** the text field of receive money */
     private static TextField receive;
 
     /** the check out scene */
     public static void checkoutScene() throws Exception {
+        totalCost = storeSingleton.getAllCustomer().get(CustomerScreen.getIndexCustomer()).getTotalCost();
+        netCost = storeSingleton.getAllCustomer().get(CustomerScreen.getIndexCustomer()).netCost();
+        discount = storeSingleton.getAllCustomer().get(CustomerScreen.getIndexCustomer()).getDiscount();
+        member =  storeSingleton.getAllCustomer().get(CustomerScreen.getIndexCustomer()).getMember();
         FlowPane root = new FlowPane();
         VBox vBox =  new VBox();
         HBox hBox = new HBox();
@@ -85,6 +89,7 @@ public class PaymentScreen {
 
     /** the handle when press ENTER key */
     private static void handlerEnter(KeyEvent e) {
+        order = storeSingleton.getAllCustomer().get(CustomerScreen.getIndexCustomer()).getOrder();
         Alert alert = new Alert(Alert.AlertType.ERROR);
         if (e.getCode() == KeyCode.ENTER) {
             String receiveText = receive.getText().trim();
