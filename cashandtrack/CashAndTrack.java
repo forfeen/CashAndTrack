@@ -83,6 +83,7 @@ public class CashAndTrack extends Application{
         componentsMainStage().setOnCloseRequest(this::writeData);
     }
 
+    /** to write the CSV file from the data in list*/
     private void writeData(WindowEvent windowEvent) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         String separator = ",";
@@ -121,8 +122,6 @@ public class CashAndTrack extends Application{
             alert.show();
         }
     }
-
-
 
     public static void main(String[] args) {
         launch(args);
