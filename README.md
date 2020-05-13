@@ -2,9 +2,9 @@
 An application that improve the performance of your ordering, billing order and billing payment.
 
 # Features
-* Collect the name of customer and menu
+* Collecting the name of customer and menu
 * Display the menu , customer's order and payment
-* Calculate the total price , receive and change money
+* Calculate the total price , received and change money
 
 # Requirements
 The application requires
@@ -14,17 +14,16 @@ The application requires
 # Installation
 1. Clone this repository then go to the directory.
 ```
-git clone https://github.com/forfeen/CashAndTrack.git
+ $ git clone https://github.com/forfeen/CashAndTrack.git
 ```
+2. Change directory to CashAndTrack
 ```
-cd CashAndTrack
+$ cd CashAndTrack
 ```
-2. Compile the CashAndTrack.jar
+3. Compile the CashAndTrack.jar
 ```
-java @vmargs -jar CashAndTrack.jar
+$ java @vmargs -jar CashAndTrack.jar
 ```
-# Usage
 
-### Created by
-
+### Author
 Chananya Photan  61160545481
