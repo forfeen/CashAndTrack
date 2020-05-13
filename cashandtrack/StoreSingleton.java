@@ -1,7 +1,6 @@
 package cashandtrack;
 
 import javafx.scene.control.Alert;
-
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
