@@ -43,12 +43,11 @@ public class MenuScreen {
 
         Button addButton = new Button("Add new menu");
         Button deleteButton = new Button("Delete menu");
-        Button backButton = new Button("Back");
+
         addButton.setOnAction(this::addMenuScreen);
         deleteButton.setOnAction(this::deleteMenu);
-        //backButton.setOnAction( this::handler );
 
-        root.getChildren().addAll(menuText, getMenuTableView(), addButton, deleteButton, backButton);
+        root.getChildren().addAll(menuText, getMenuTableView(), addButton, deleteButton);
         sc.setPrefViewportHeight(1000);
         sc.setVbarPolicy(ScrollPane.ScrollBarPolicy.ALWAYS);
         sc.setContent(root);
@@ -154,8 +153,9 @@ public class MenuScreen {
             else {
                 double priceMenu = Double.parseDouble(price);
                 Menu newMenu = new Menu(name, priceMenu);
-
-                if (storeSingleton.getAllMenu().get(0).equalsTo(newMenu)){
+                if (storeSingleton.getAllMenu().isEmpty()){
+                    storeSingleton.getAllMenu().add(newMenu);
+                } else if (storeSingleton.getAllMenu().get(0).equalsTo(newMenu)){
                     alert.setContentText("Menu already exist.");
                     alert.showAndWait();
                 } else {

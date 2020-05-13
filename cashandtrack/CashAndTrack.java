@@ -6,12 +6,15 @@ import javafx.event.ActionEvent;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
+import java.io.*;
 
 /** The application to improve the performance
  * of the ordering, billing order and billing payment.*/
@@ -19,6 +22,8 @@ public class CashAndTrack extends Application{
 
     /** create the stage */
    public static Stage stage = new Stage();
+
+    private static StoreSingleton storeSingleton = StoreSingleton.getInstance();
 
     /** the main stage of the application */
     public Stage componentsMainStage() throws Exception {
@@ -75,8 +80,50 @@ public class CashAndTrack extends Application{
     /** to show the stage */
     public void start(Stage stage) throws Exception {
         componentsMainStage().show();
+        componentsMainStage().setOnCloseRequest(this::writeData);
     }
-    
+
+    private void writeData(WindowEvent windowEvent) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        String separator = ",";
+        File customerFile = new File("txt/customer.csv");
+        try {
+            BufferedWriter customerWriter = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(customerFile)));
+            customerWriter.write("#Customer");
+            customerWriter.newLine();
+            for (Customer customer : storeSingleton.getAllCustomer()) {
+                StringBuffer oneLine = new StringBuffer();
+                oneLine.append(customer.getCustomerName());
+                oneLine.append(separator);
+                oneLine.append(customer.getMember());
+                oneLine.append(separator);
+                oneLine.append(customer.getTotalCost());
+                customerWriter.write(oneLine.toString());
+                customerWriter.newLine();
+            }
+            customerWriter.close();
+
+            File menuFile = new File("txt/menu.csv");
+            BufferedWriter menuWriter = new BufferedWriter( new OutputStreamWriter(new FileOutputStream(menuFile)));
+            menuWriter.write("#Menu and Price");
+            menuWriter.newLine();
+            for (Menu menu : storeSingleton.getAllMenu()) {
+                StringBuffer oneLine = new StringBuffer();
+                oneLine.append(menu.getMenuName());
+                oneLine.append(separator);
+                oneLine.append(menu.getMenuPrice());
+                menuWriter.write(oneLine.toString());
+                menuWriter.newLine();
+            }
+            menuWriter.close();
+        } catch (IOException e) {
+            alert.setContentText("Error");
+            alert.show();
+        }
+    }
+
+
+
     public static void main(String[] args) {
         launch(args);
     }

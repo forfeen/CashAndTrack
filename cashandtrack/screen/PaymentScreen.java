@@ -40,42 +40,50 @@ public class PaymentScreen {
         netCost = storeSingleton.getAllCustomer().get(CustomerScreen.getIndexCustomer()).netCost();
         discount = storeSingleton.getAllCustomer().get(CustomerScreen.getIndexCustomer()).getDiscount();
         member =  storeSingleton.getAllCustomer().get(CustomerScreen.getIndexCustomer()).getMember();
+
         FlowPane root = new FlowPane();
-        VBox vBox =  new VBox();
-        HBox hBox = new HBox();
-        HBox hBoxReceive = new HBox();
         root.setAlignment(Pos.CENTER);
         root.setPadding(new Insets(10.0));
         root.setPrefWrapLength(350);
         root.setHgap(10.0);
         root.setVgap(30);
+
+        VBox vBox =  new VBox();
         vBox.setPadding(new Insets(10));
         vBox.setSpacing(10);
-        hBox.setSpacing(10);
-        hBox.setPadding(new Insets(10));
 
-        String txt = String.format("Total Cost : %.2f", totalCost );
-        String txt2 = String.format("Member : %s (%s)", member, discount);
-        String txt3 = String.format("Net Cost : %.2f ", netCost);
+        HBox hBoxTable = new HBox();
+        hBoxTable.setSpacing(10);
+        hBoxTable.setPadding(new Insets(10));
+
+        HBox hBoxReceive = new HBox();
+        hBoxReceive.setAlignment(Pos.CENTER);
+
+        String totalTexT = String.format("Total Cost : %.2f", totalCost );
+        Label costLabel = new Label(totalTexT);
+        costLabel.setFont( new Font("Arial", 15));
+
+        String memberText = String.format("Member : %s (%s)", member, discount);
+        Label memberLabel = new Label(memberText);
+        memberLabel.setFont( new Font("Arial", 15));
+
+        String netCostText = String.format("Net Cost : %.2f ", netCost);
+        Label netLabel = new Label(netCostText);
+        netLabel.setFont( new Font("Arial", 15));
+
         Label paymentText = new Label("Check out");
-        Label costText = new Label(txt);
-        Label memberTxt = new Label(txt2);
-        Label netText = new Label(txt3);
         paymentText.setFont( new Font("Arial", 30));
 
-        costText.setFont( new Font("Arial", 15));
-        memberTxt.setFont( new Font("Arial", 15));
-        netText.setFont( new Font("Arial", 15));
-        Label txt4 = new Label("Receive : ");
+        Label receiveLabel = new Label("Receive : ");
         receive = new TextField();
         receive.setOnKeyPressed(PaymentScreen::handlerEnter);
 
         vBox.setAlignment(Pos.CENTER);
-        hBox.setAlignment(Pos.CENTER);
-        hBoxReceive.setAlignment(Pos.CENTER);
-        hBoxReceive.getChildren().addAll(txt4, receive);
-        hBox.getChildren().addAll(CustomerScreen.getCartTableView());
-        vBox.getChildren().addAll(paymentText, hBox, costText, netText, memberTxt, hBoxReceive);
+        hBoxTable.setAlignment(Pos.CENTER);
+
+        hBoxReceive.getChildren().addAll(receiveLabel, receive);
+        hBoxTable.getChildren().addAll(CustomerScreen.getCartTableView());
+        vBox.getChildren().addAll(paymentText, hBoxTable, costLabel, netLabel, memberLabel, hBoxReceive);
 
         root.getChildren().addAll(vBox);
         Scene scene = new Scene(new VBox(root));
