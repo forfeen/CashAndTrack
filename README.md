@@ -1,5 +1,5 @@
 # Cash&Track
-An application that improve the performance of your ordering, billing order and billing payment.
+An application which improve the performance of  ordering, billing order and billing payment at restaurant.
 
 # Project documents
 * [Project Proposal](https://docs.google.com/document/d/1r1GHGjwS01i9EkbcIOv_BpXK6YHCbfBTRyN3w-n3S_s/edit)
@@ -29,21 +29,21 @@ $ cd CashAndTrack
 $ java @vmargs -jar CashAndTrack.jar
 ```
 # Usage
-First, you have to choose the menu or customer feature.
+1. Choose the menu or customer feature.
 
 ![](images/main.png)
 
- In the menu screen , you can see all menus in the table.
+ 2. In the menu screen , you can see all menus in the table.
  
  If you want to delete the menu , select the row and click **Delete Menu** button.
  
  ![](images/menu-table.png) 
  
- And you can add the menu by click the **Add new menu** button.
+ 3. Add the menu by click the **Add new menu** button.
  
  ![](images/add-menu.png)
  
- In the customer screen , you can see all  customers in the table.
+ 4. In the customer screen , you can see all  customers in the table.
  
  
  Click  **Add New Customer** button to add new customer , select the row and click
@@ -51,11 +51,11 @@ First, you have to choose the menu or customer feature.
  
  ![](images/customer-table.png)
  
- Double-click on the customer's row to add menu to cart.
+ 5. Double-click on the customer's row to add menu to cart.
  
  ![](images/add-cart.png)
  
- Select the customer's row and click **Check out** button to check out. 
+ 6. Select the customer's row and click **Check out** button to check out. 
   
   Enter in the text field and press **ENTER** key
  
@@ -67,5 +67,5 @@ First, you have to choose the menu or customer feature.
 
 
 
-### Author
+# Author
 Chananya Photan  61160545481
